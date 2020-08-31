@@ -15,9 +15,9 @@ const stack = createStackNavigator();
 
 const defaultOptionsNavigation = {
   headerStyle: {
-    backgroundColor: Platform.OS === 'android' ? Colors.primary : '',
+    backgroundColor: Platform.OS === "android" ? Colors.primary : "",
   },
-  headerTintColor: Platform.OS === 'android' ? 'white' : Colors.primary,
+  headerTintColor: Platform.OS === "android" ? "white" : Colors.primary,
   headerTitleStyle: {
     fontWeight: "bold",
   },
@@ -26,21 +26,20 @@ const defaultOptionsNavigation = {
 const navigator = () => {
   return (
     <NavigationContainer>
-      <stack.Navigator screenOptions={defaultOptionsNavigation}>
+      <stack.Navigator screenOptions={defaultOptionsNavigation} initialRouteName="PlaceList">
         <stack.Screen
           name="PlacesList"
           component={PlacesListScreen}
           options={{ title: "All Places" }}
         />
         <stack.Screen
-          name="PlaceDetail"
-          component={PlaceDetailScreen}
-          options={({ route }) => ({ title: route.params.name })}
-        />
-        <stack.Screen
           name="NewPlace"
           component={NewPlaceScreen}
           options={{ title: "New Place" }}
+        />
+        <stack.Screen
+          name="PlaceDetails"
+          component={PlaceDetailScreen}
         />
         <stack.Screen
           name="Map"
@@ -52,4 +51,18 @@ const navigator = () => {
   );
 };
 
-export default navigator;
+const Stack = createStackNavigator();
+
+function App() {
+  return (
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="PlaceList">
+        <Stack.Screen name="PlaceList" component={PlacesListScreen} />
+        <Stack.Screen name="NewPlace" component={NewPlaceScreen} />
+        <Stack.Screen name="PlaceDetail" component={PlaceDetailScreen} />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+}
+
+export default App;

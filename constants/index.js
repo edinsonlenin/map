@@ -1,6 +1,6 @@
-import ColorDefecto, {Colors} from './colors';
+// import ColorDefecto, {Colors} from './colors';
 
-export {
-  ColorDefecto,
-  Colors
-}
+// export {
+//   ColorDefecto,
+//   Colors
+// }
