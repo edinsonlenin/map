@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   View,
   StyleSheet,
@@ -7,10 +7,11 @@ import {
   Platform,
   FlatList,
 } from "react-native";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 
 import { IoniconsHeaderButtons, Item } from "../components/HeaderButton";
 import PlaceItem from "../components/PlaceItem";
+import * as actionsPlaces from '../store/actions/places'
 
 const PlacesListScreen = ({ navigation }) => {
   React.useLayoutEffect(() => {
@@ -27,6 +28,11 @@ const PlacesListScreen = ({ navigation }) => {
     });
   }, [navigation]);
 
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(actionsPlaces.setPlaces());
+  }, [dispatch]);
+
   const places = useSelector((state) => state.places.places);
   return (
     <View style={styles.container}>
@@ -35,7 +41,7 @@ const PlacesListScreen = ({ navigation }) => {
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <PlaceItem
-            image={null}
+            image={item.image}
             title={item.title}
             address={null}
             onSelect={() => navigation.navigate("PlaceDetail", {

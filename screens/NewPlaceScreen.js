@@ -19,11 +19,11 @@ const NewPlaceScreen = ({navigation}) => {
     setTitleValue(value);
   };
   const dispatch = useDispatch();
-  const savePlaceHandler = () => {
-    dispatch(actionsPlaces.addPlace(titleValue));
+  const savePlaceHandler = async () => {
+    dispatch(await actionsPlaces.addPlace(titleValue, image));
     navigation.goBack();
   };
-
+  const [image, setImage] = useState();
   return (
     <ScrollView>
       <View style={styles.form}>
@@ -33,7 +33,7 @@ const NewPlaceScreen = ({navigation}) => {
           onChangeText={titleChangeHandler}
           value={titleValue}
         />
-        <ImagePicker />
+        <ImagePicker onSelectedImage={image => setImage(image)} />
         <Button title="Save Place" onPress={savePlaceHandler}  style={styles.save} />
       </View>
     </ScrollView>
