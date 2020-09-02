@@ -10,9 +10,10 @@ export const setPlaces = () => {
   return async dispatch => {
     const result = await fetchPlaces();
     return dispatch({type: SET_PLACES, payload: result.rows._array});
+    
   };
 };
-export const addPlace = (title, image) => {
+export const addPlace = (title, image, longitude, latitude) => {
   return async dispatch => {
     const nameFile = image.split("/").pop();
     const newPath = FileSystem.documentDirectory + nameFile;
@@ -23,7 +24,7 @@ export const addPlace = (title, image) => {
           to: newPath
         });
 
-        const result = await insertPlace(title, newPath, 'dummy adrress', 15.6, 14.8);
+        const result = await insertPlace(title, newPath, 'dummy adrress', latitude, longitude);
         return dispatch({
           type: ADD_PLACE,
           payload: {

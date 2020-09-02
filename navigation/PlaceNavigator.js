@@ -35,7 +35,7 @@ const navigator = () => {
         <stack.Screen
           name="NewPlace"
           component={NewPlaceScreen}
-          options={{ title: "New Place" }}
+          options={{ title: 'Add Place' }}
         />
         <stack.Screen
           name="PlaceDetails"
@@ -51,18 +51,4 @@ const navigator = () => {
   );
 };
 
-const Stack = createStackNavigator();
-
-function App() {
-  return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName="PlaceList">
-        <Stack.Screen name="PlaceList" component={PlacesListScreen} />
-        <Stack.Screen name="NewPlace" component={NewPlaceScreen} />
-        <Stack.Screen name="PlaceDetail" component={PlaceDetailScreen} />
-      </Stack.Navigator>
-    </NavigationContainer>
-  );
-}
-
-export default App;
+export default navigator;

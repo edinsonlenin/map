@@ -12,15 +12,20 @@ import { useDispatch } from 'react-redux';
 
 import * as actionsPlaces from '../store/actions/places';
 import ImagePicker from '../components/ImagePicker';
+import LocationPicker from '../components/LocationPicker';
 
 const NewPlaceScreen = ({navigation}) => {
   const [titleValue, setTitleValue] = useState("");
+  const [location, setLocation] = useState();
   const titleChangeHandler = (value) => {
     setTitleValue(value);
   };
+  const selectedLocationHandler = (location) => {
+    setLocation(location);
+  };
   const dispatch = useDispatch();
   const savePlaceHandler = async () => {
-    dispatch(await actionsPlaces.addPlace(titleValue, image));
+    dispatch(await actionsPlaces.addPlace(titleValue, image, location.longitude, location.latitude));
     navigation.goBack();
   };
   const [image, setImage] = useState();
@@ -34,6 +39,7 @@ const NewPlaceScreen = ({navigation}) => {
           value={titleValue}
         />
         <ImagePicker onSelectedImage={image => setImage(image)} />
+        <LocationPicker onSelectedLocation={selectedLocationHandler} />
         <Button title="Save Place" onPress={savePlaceHandler}  style={styles.save} />
       </View>
     </ScrollView>

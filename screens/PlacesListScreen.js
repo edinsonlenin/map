@@ -38,7 +38,7 @@ const PlacesListScreen = ({ navigation }) => {
     <View style={styles.container}>
       <FlatList
         data={places}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
           <PlaceItem
             image={item.image}
