@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   StyleSheet,
@@ -14,9 +14,18 @@ import * as actionsPlaces from '../store/actions/places';
 import ImagePicker from '../components/ImagePicker';
 import LocationPicker from '../components/LocationPicker';
 
-const NewPlaceScreen = ({navigation}) => {
+const NewPlaceScreen = ({navigation, route}) => {
+  const { pickedLocation } = route.params || {};
+  
   const [titleValue, setTitleValue] = useState("");
   const [location, setLocation] = useState();
+
+  useEffect(() => {
+    if (pickedLocation){
+      setLocation(pickedLocation);
+    }
+  }, [route.params]);
+
   const titleChangeHandler = (value) => {
     setTitleValue(value);
   };
@@ -25,8 +34,14 @@ const NewPlaceScreen = ({navigation}) => {
   };
   const dispatch = useDispatch();
   const savePlaceHandler = async () => {
-    dispatch(await actionsPlaces.addPlace(titleValue, image, location.longitude, location.latitude));
-    navigation.goBack();
+    try {
+
+      dispatch(await actionsPlaces.addPlace(titleValue, image, location));
+      navigation.goBack();
+    }
+    catch(error){
+      console.log(error, 'savePlaceHolder')
+    }
   };
   const [image, setImage] = useState();
   return (
@@ -38,8 +53,8 @@ const NewPlaceScreen = ({navigation}) => {
           onChangeText={titleChangeHandler}
           value={titleValue}
         />
-        <ImagePicker onSelectedImage={image => setImage(image)} navigation={navigation} />
-        <LocationPicker onSelectedLocation={selectedLocationHandler} />
+        <ImagePicker onSelectedImage={image => setImage(image)} />
+        <LocationPicker onSelectedLocation={selectedLocationHandler} navigation={navigation} locationMap={location}/>
         <Button title="Save Place" onPress={savePlaceHandler}  style={styles.save} />
       </View>
     </ScrollView>

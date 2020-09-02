@@ -38,12 +38,12 @@ const PlacesListScreen = ({ navigation }) => {
     <View style={styles.container}>
       <FlatList
         data={places}
-        keyExtractor={(item) => item.id.toString()}
+        keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <PlaceItem
             image={item.image}
             title={item.title}
-            address={null}
+            address={item.address}
             onSelect={() => navigation.navigate("PlaceDetail", {
               id: item.id,
               title: item.title

@@ -15,9 +15,13 @@ import * as Permissions from "expo-permissions";
 import Colors from "../constants/colors";
 import MapLocation from "./MapLocation";
 
-const LocationPicker = ({ onSelectedLocation, navigation }) => {
+const LocationPicker = ({ onSelectedLocation, navigation, locationMap }) => {
   const [location, setLocation] = useState();
   const [isFetching, setIsFetching] = useState(false);
+
+  useEffect(() => {
+    setLocation(locationMap);
+  }, [locationMap]);
 
   useEffect(() => {
     getPermissionAsync();
@@ -58,12 +62,12 @@ const LocationPicker = ({ onSelectedLocation, navigation }) => {
   };
 
   const setLocationHandler = () => {
-    navigation.navigate('Map');
+    navigation.navigate('Map', {pickedLocation: location});
   };
 
   return (
     <View style={styles.container}>
-      <MapLocation location={location} style={styles.imageContainer}>
+      <MapLocation location={location} style={styles.imageContainer} onPress={setLocationHandler}>
         {!isFetching ? (
           <Text>No location chosen yet!</Text>
         ) : (
@@ -78,7 +82,7 @@ const LocationPicker = ({ onSelectedLocation, navigation }) => {
         />
         <Button
           style={styles.save}
-          title="Set Location from Map"
+          title="View Map"
           onPress={setLocationHandler}
         />
       </View>
@@ -98,8 +102,9 @@ const styles = StyleSheet.create({
   },
   buttonsContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center'
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    width: '100%'
   },
   save: {
     color: Colors.primary,
