@@ -38,7 +38,7 @@ const NewPlaceScreen = ({navigation}) => {
           onChangeText={titleChangeHandler}
           value={titleValue}
         />
-        <ImagePicker onSelectedImage={image => setImage(image)} />
+        <ImagePicker onSelectedImage={image => setImage(image)} navigation={navigation} />
         <LocationPicker onSelectedLocation={selectedLocationHandler} />
         <Button title="Save Place" onPress={savePlaceHandler}  style={styles.save} />
       </View>

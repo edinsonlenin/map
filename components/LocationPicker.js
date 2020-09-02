@@ -13,29 +13,26 @@ import {
 import * as Location from "expo-location";
 import * as Permissions from "expo-permissions";
 import Colors from "../constants/colors";
-import MapLocation from './MapLocation';
+import MapLocation from "./MapLocation";
 
-
-const LocationPicker = ({onSelectedLocation}) => {
+const LocationPicker = ({ onSelectedLocation, navigation }) => {
   const [location, setLocation] = useState();
   const [isFetching, setIsFetching] = useState(false);
 
-  useEffect(()=>{
+  useEffect(() => {
     getPermissionAsync();
-  },[])
+  }, []);
 
   const getPermissionAsync = async () => {
     const error = "Sorry, we need camera roll permissions to make this work!";
     if (Platform.OS !== "web") {
-      try{
-
+      try {
         const { status } = await Permissions.askAsync(Permissions.LOCATION);
         if (!status) {
           Alert.alert("Permissions Error", error, [{ text: "OK" }]);
           return false;
         }
-      }
-      catch(error){
+      } catch (error) {
         console.log(error);
       }
     }
@@ -44,21 +41,24 @@ const LocationPicker = ({onSelectedLocation}) => {
 
   const getLocationHandler = async () => {
     setIsFetching(true);
-     try{
+    try {
       const position = await Location.getCurrentPositionAsync({
         timeout: 5000,
       });
       const location = {
         latitude: position.coords.latitude,
-        longitude: position.coords.longitude
+        longitude: position.coords.longitude,
       };
       setLocation(location);
       onSelectedLocation(location);
+    } catch (err) {
+      Alert.alert("Error", "Try again in a few moment", [{ text: "Ok" }]);
     }
-    catch(err){
-      Alert.alert("Error", "Try again in a few moment", [{text: 'Ok'}])
-    }
-    setIsFetching(false);  
+    setIsFetching(false);
+  };
+
+  const setLocationHandler = () => {
+    navigation.navigate('Map');
   };
 
   return (
@@ -67,10 +67,21 @@ const LocationPicker = ({onSelectedLocation}) => {
         {!isFetching ? (
           <Text>No location chosen yet!</Text>
         ) : (
-        <ActivityIndicator size='large' color={Colors.primary} />
+          <ActivityIndicator size="large" color={Colors.primary} />
         )}
       </MapLocation>
-      <Button style={styles.save} title="Get User Location" onPress={getLocationHandler} />
+      <View style={styles.buttonsContainer}>
+        <Button
+          style={styles.save}
+          title="Get User Location"
+          onPress={getLocationHandler}
+        />
+        <Button
+          style={styles.save}
+          title="Set Location from Map"
+          onPress={setLocationHandler}
+        />
+      </View>
     </View>
   );
 };
@@ -82,8 +93,13 @@ const styles = StyleSheet.create({
   imageContainer: {
     width: "100%",
     height: 150,
-    borderColor: '#ccc',
-    borderWidth: 1
+    borderColor: "#ccc",
+    borderWidth: 1,
+  },
+  buttonsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center'
   },
   save: {
     color: Colors.primary,
