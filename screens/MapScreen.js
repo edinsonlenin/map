@@ -1,24 +1,39 @@
-import React, {useState, useEffect} from "react";
-import { View, StyleSheet, Text, TouchableOpacity, Platform } from "react-native";
-import MapView, { Marker } from 'react-native-maps';
+import React, { useState, useEffect } from "react";
+import {
+  View,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  Platform,
+} from "react-native";
+import MapView, { Marker } from "react-native-maps";
 
 import Colors from "../constants/colors";
 
-const MapScreen = ({navigation, route}) => {
+const MapScreen = ({ navigation, route }) => {
+  const { readOnly, pickedLocation } = route.params || {
+    readOnly: false,
+    pickedLocation: {},
+  };
   const { pickedLocation } = route.params || {};
   const [selectedLocation, setSelectedLocation] = useState();
   const saveHandler = () => {
     if (selectedLocation) {
-      navigation.navigate("NewPlace", {pickedLocation: selectedLocation})
-    };
+      navigation.navigate("NewPlace", { pickedLocation: selectedLocation });
+    }
   };
   React.useLayoutEffect(() => {
     navigation.setOptions({
-      headerRight: () => (
-        <TouchableOpacity style={styles.save} onPress={saveHandler}>
-          <Text style={styles.text}>Save</Text>
-        </TouchableOpacity>
-      ),
+      headerRight: () => {
+        if (readOnly){
+          return {};
+        }
+        return (
+          <TouchableOpacity style={styles.save} onPress={saveHandler}>
+            <Text style={styles.text}>Save</Text>
+          </TouchableOpacity>
+        );
+      },
     });
   }, [navigation, selectedLocation]);
 
@@ -30,7 +45,7 @@ const MapScreen = ({navigation, route}) => {
 
   const initialRegion = {
     latitude: pickedLocation ? pickedLocation.latitude : -11.9289,
-    longitude: pickedLocation ? pickedLocation.longitude :-77.040,
+    longitude: pickedLocation ? pickedLocation.longitude : -77.04,
     latitudeDelta: 0.0922,
     longitudeDelta: 0.0421,
   };
@@ -40,10 +55,15 @@ const MapScreen = ({navigation, route}) => {
     setSelectedLocation(region.nativeEvent.coordinate);
   };
 
-  
   return (
-    <MapView style={styles.container} initialRegion={initialRegion} onPress={selectedLocationHandler}>
-      {selectedLocation && <Marker title="Location Selected" coordinate={selectedLocation} />}
+    <MapView
+      style={styles.container}
+      initialRegion={initialRegion}
+      onPress={selectedLocationHandler}
+    >
+      {selectedLocation && (
+        <Marker title="Location Selected" coordinate={selectedLocation} />
+      )}
     </MapView>
   );
 };
@@ -53,12 +73,12 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   text: {
-    color: Platform.OS === 'android' ? 'white' : Colors.primary,
-    fontSize: 18
+    color: Platform.OS === "android" ? "white" : Colors.primary,
+    fontSize: 18,
   },
   save: {
-    marginHorizontal: 15
-  }
+    marginHorizontal: 15,
+  },
 });
 
 export default MapScreen;

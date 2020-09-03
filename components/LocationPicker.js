@@ -62,7 +62,7 @@ const LocationPicker = ({ onSelectedLocation, navigation, locationMap }) => {
   };
 
   const setLocationHandler = () => {
-    navigation.navigate('Map', {pickedLocation: location});
+    navigation.navigate('Map', {readOnly: false, pickedLocation: location});
   };
 
   return (

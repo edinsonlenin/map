@@ -38,7 +38,7 @@ const navigator = () => {
           options={{ title: 'Add Place' }}
         />
         <stack.Screen
-          name="PlaceDetails"
+          name="PlaceDetail"
           component={PlaceDetailScreen}
         />
         <stack.Screen
